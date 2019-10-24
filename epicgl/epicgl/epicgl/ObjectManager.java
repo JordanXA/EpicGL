@@ -18,14 +18,15 @@ public class ObjectManager {
 		   else {
 			   object.fillObject(new Vector3(0.5f,0.5f,0.5f));
 		   }
-		   object.resetCollisions();
 	   }
 	   
    }
    
    private void processCollisions() {
 	   for(Object object : objectList) {
+		   object.resetCollisions();
 		   for(Object object2 : objectList) {
+			   //makes sure not to check object for colliding against itself
 			   if(object==object2) {continue;}
 			   else {
 				   if (Physics.CollisionTest(object, object2)) {
@@ -57,5 +58,12 @@ public class ObjectManager {
     */
    public void addObject(Object newObject) {
       objectList.add(newObject);
+   }
+   
+   public static void printNameOfObjectList(List<Object> list) {
+	   for (Object object : list) {
+		   System.out.print(object.getName());
+	   }
+	   System.out.println();
    }
 }

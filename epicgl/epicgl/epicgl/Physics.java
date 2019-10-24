@@ -56,7 +56,23 @@ public class Physics {
 	 * @return Returns true if the rectangle and ball intersect, false if they do not.
 	 */
 	public static boolean CollisionTest(Rectangle rect1, Ball ball2) {
-		return false;
+		Vector2f rectPos = rect1.getPosition();
+		Vector2f ballPos = ball2.getPosition();
+		
+		float halfWidth = 0.5f*rect1.getWidth();
+		float halfHeight = 0.5f*rect1.getHeight();
+		
+		
+		//find the point on the rectangle nearest the center of the circle
+		float nearX = (float) (Math.max(rectPos.x-halfWidth, Math.min(ballPos.x, rectPos.x + halfWidth ) ));
+		float nearY = (float) (Math.max(rectPos.y-halfHeight, Math.min(ballPos.y, rectPos.y + halfHeight ) ));
+		
+		//finds the distance between the circle and the nearest point
+		float deltaX = ballPos.x - nearX;
+		float deltaY = ballPos.y - nearY;
+		
+		//check if the distance between the two objects centers is less than or equal to the radius of the ball, if it is less, they are touching
+		return (deltaX*deltaX + deltaY*deltaY) <= (ball2.getRadius()*ball2.getRadius());
 	}
 	
 	/**

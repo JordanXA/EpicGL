@@ -19,6 +19,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 
 public class Mesh {
+	
+	private final boolean PRINT_VERTS = false;
 
    protected Vector3[] vertices;
    protected int[] indices; //needs to be built into vao?
@@ -149,12 +151,13 @@ public class Mesh {
       
    protected void updateBuffers() {
 
-      for (int i=0; i<getFloats(vertices).length; i++) {
-         System.out.printf(" %f",getFloats(vertices)[i]);
-      }
-      System.out.println();
-      
-      
+	   if(PRINT_VERTS) {
+		      for (int i=0; i<getFloats(vertices).length; i++) {
+		          System.out.printf(" %f",getFloats(vertices)[i]);
+		       }
+		       System.out.println();
+	   }
+
       //sets up temporary buffers to hold the data to put into the VBOs
       FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(getFloats(vertices).length);
       verticesBuffer.put(getFloats(vertices)).flip();

@@ -20,8 +20,18 @@ public class Object {
    
    protected List<Object> collidingWith = new ArrayList<Object>();
    
+   protected String name = new String("Unnamed");
+   
    Object() {
 	   updateTransformation();
+   }
+   
+   public void setName(String name) {
+	   this.name = name;
+   }
+   
+   public String getName() {
+	   return name;
    }
    
    public void resetCollisions() {

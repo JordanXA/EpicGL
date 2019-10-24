@@ -20,14 +20,14 @@ public class Epic {
 
 		ObjectManager objectManager = new ObjectManager();
 
-		Rectangle rect1 = new Rectangle(0,0,100f,100f);
-		Rectangle rect2 = new Rectangle(200,200,100f,100f);
-		Rectangle rect3 = new Rectangle(500,500,50f,250f);
-		Ball ball1 = new Ball(200,500,50);
-		Ball ball2 = new Ball(0,0,75f);
+		Rectangle rect1 = new Rectangle(0,0,100f,100f); rect1.setName("Player Rectangle");
+		Rectangle rect2 = new Rectangle(200,200,100f,100f); rect2.setName("Square");
+		Rectangle rect3 = new Rectangle(500,500,50f,250f); rect3.setName("Funny Rectangle");
+		Ball ball1 = new Ball(200,500,50); ball1.setName("Circle");
+		Ball playerBall = new Ball(0,0,500f); playerBall.setName("Player Ball");
 		
 		objectManager.addObject(rect1); objectManager.addObject(rect2); objectManager.addObject(ball1);
-		objectManager.addObject(rect3);	objectManager.addObject(ball2);
+		objectManager.addObject(rect3);	objectManager.addObject(playerBall);
 
 		Mouse mouse = new Mouse(window);
 
@@ -43,18 +43,25 @@ public class Epic {
 				else {testBool=true;}
 			}
 			
+			if (mouse.justClicked(buttons.RIGHT)) {
+				if(testBool==true) {
+					ObjectManager.printNameOfObjectList(playerBall.getCollisions());
+				}
+				else {
+					ObjectManager.printNameOfObjectList(rect1.getCollisions());
+				}
+			}
+			
 
 			mouse.update();
 			// TODO: make mouse actually work again
 
 			if(testBool==true) {
-				ball2.setPosition(mouse.getPosition().x, mouse.getPosition().y);
+				playerBall.setPosition(mouse.getPosition().x, mouse.getPosition().y);
 			}
 			else {
 				rect1.setPosition(mouse.getPosition().x, mouse.getPosition().y);
 			}
-			
-			System.out.println(testBool);
 			
 			
 			objectManager.update();
