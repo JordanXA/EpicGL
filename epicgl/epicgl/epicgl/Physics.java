@@ -1,6 +1,7 @@
 package epicgl;
 
 import org.joml.Vector2f;
+import java.lang.Math;
 
 /**
  * Contains static methods for making physics calculations.
@@ -18,29 +19,13 @@ public class Physics {
 	 */
 	public static boolean CollisionTest(Rectangle rect1, Rectangle rect2) {
 		
-		/*
-		 * This way wasn't working but i may try to use it later, not sure which method is quicker
-		 * 
-		//uses the top left of each rectangle
-		Vector2f pos1 = rect1.topLeft();
-		Vector2f pos2 = rect2.topLeft();
+		//Tests for intersection on the X axis
+		boolean collisionX = !( Math.abs(rect1.getPosition().x - rect2.getPosition().x ) > ( rect1.getWidth()/2 + rect2.getWidth()/2 ) );
+		//Tests for intersection on the Y axis
+		boolean collisionY = !( Math.abs(rect1.getPosition().y - rect2.getPosition().y ) > ( rect1.getHeight()/2 + rect2.getHeight()/2 ) );
 		
-		//checks for intersection on the X axis
-		boolean collisionX = (rect1.getPosition().x + rect1.getWidth() >= rect2.getPosition().x &&
-				rect2.getPosition().x+rect2.getWidth() >= rect1.getPosition().x);
-		//checks for intersection on the y axis
-		boolean collisionY = (rect1.getPosition().y + rect1.getHeight() >= rect2.getPosition().y &&
-				rect2.getPosition().y+rect2.getHeight() >= rect1.getPosition().y);
-		//returns true if intersects in 2d space
+		//returns true if the objects intersect on both axes.
 		return collisionX && collisionY;
-		*/
-		
-		boolean intersectLeft, intersectTop, intersectBottom, intersectRight;
-		intersectLeft = intersectTop = intersectBottom = intersectRight = false;
-		
-		//if();
-		
-		return false;
 
 	}
 	
@@ -51,7 +36,17 @@ public class Physics {
 	 * @return Returns true if the two balls intersect, false if they do not.
 	 */
 	public static boolean CollisionTest(Ball ball1, Ball ball2) {
-		return false;
+		
+		//the objects touch if the distance between them is less than or equal to both of their radii added together.
+		float r1 = ball1.getRadius();
+		float r2 = ball2.getRadius();
+		
+		float radiiSquared = (float)Math.pow((r1+r2), 2);
+		
+		float distanceSquared = ((float)Math.pow((ball2.getPosition().x - ball1.getPosition().x), 2))+ //X2-X1 squared
+								((float)Math.pow((ball2.getPosition().y - ball1.getPosition().y), 2)); //Y2-Y1 squared
+		
+		return (distanceSquared<=radiiSquared);
 	}
 	
 	/**

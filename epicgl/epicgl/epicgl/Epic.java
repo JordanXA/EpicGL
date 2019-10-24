@@ -24,26 +24,37 @@ public class Epic {
 		Rectangle rect2 = new Rectangle(200,200,100f,100f);
 		Rectangle rect3 = new Rectangle(500,500,50f,250f);
 		Ball ball1 = new Ball(200,500,50);
+		Ball ball2 = new Ball(0,0,75f);
 		
 		objectManager.addObject(rect1); objectManager.addObject(rect2); objectManager.addObject(ball1);
-		objectManager.addObject(rect3);
+		objectManager.addObject(rect3);	objectManager.addObject(ball2);
 
 		Mouse mouse = new Mouse(window);
 
+		boolean testBool = false;
+		
 		// game loop
 		while (!glfwWindowShouldClose(window)) {
 
 			glfwPollEvents();
 
 			if (mouse.justClicked(buttons.LEFT)) {
-				ball1.getMeshes()[0].cleanup();
+				if(testBool) {testBool=false;}
+				else {testBool=true;}
 			}
 			
 
 			mouse.update();
 			// TODO: make mouse actually work again
 
-			rect1.setPosition(mouse.getPosition());
+			if(testBool==true) {
+				ball2.setPosition(mouse.getPosition().x, mouse.getPosition().y);
+			}
+			else {
+				rect1.setPosition(mouse.getPosition().x, mouse.getPosition().y);
+			}
+			
+			System.out.println(testBool);
 			
 			
 			objectManager.update();

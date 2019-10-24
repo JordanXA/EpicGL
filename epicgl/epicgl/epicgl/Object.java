@@ -44,6 +44,11 @@ public class Object {
 	   this.position = position;
    }
    
+   public void setPosition(float x, float y) {
+	   position.x = x;
+	   position.y = y;
+   }
+   
    public void update() {
 	   speed.x+=acceleration.x;
 	   speed.y+=acceleration.y;
