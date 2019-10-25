@@ -12,17 +12,20 @@ public class Object {
    protected Vector2f position = new Vector2f(0,0);
    protected Vector2f speed = new Vector2f();
    protected Vector2f acceleration = new Vector2f();
-   
    protected float mass;
    protected Vector3 fillColor;
-   
    protected Matrix4f tMatrix;
-   
    protected List<Object> collidingWith = new ArrayList<Object>();
-   
    protected String name = new String("Unnamed");
    
-   Object() {
+   /**
+    *Settings for the behavior of an object when it exits the screen
+    */
+   public static enum ExitBehavior {
+	   FREE, STOP, BOUNCE, WRAP
+   }
+   
+   protected Object() {
 	   updateTransformation();
    }
    
@@ -59,12 +62,18 @@ public class Object {
 	   position.y = y;
    }
    
-   void update() {
+   /**
+    * An update function common for all objects of the object class
+    * The method update() is meant to be overridden by child objects, so they can have specific functionality
+    */
+   final void tick() {
 	   speed.x+=acceleration.x;
 	   speed.y+=acceleration.y;
 	   
 	   move(speed);
 	   
+	   //TODO: add the update(); method to this class, and make it run
+	   //TODO: handle the exit behavior automatically
    }
    
    Mesh[] getMeshes() {
@@ -106,6 +115,16 @@ public class Object {
       updateTransformation();
    }
    
+   public void setY(float y) {
+	      position.y = y;
+	      updateTransformation();	   
+   }
+	   
+	public void setX(float x) {
+		position.x = x;
+		updateTransformation();	   
+	}
+   
    void updateTransformation() {
       tMatrix = new Matrix4f();
       tMatrix.m00(1);
@@ -124,6 +143,11 @@ public class Object {
    public boolean isOutsideScreen() {
 	   System.out.println("Object "+this.getClass().getName()+" has incomplete isOutsideScreen() method!");
 	   return false;
+	   //TODO: change this
+   }
+   
+   public void exitedScreen(Object.ExitBehavior behavior) {
+	   //TODO: make this execute different methods based on the exit behavior
    }
    
    

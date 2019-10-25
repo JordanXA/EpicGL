@@ -23,7 +23,12 @@ public class PongGame extends Game {
 		if(mouse.justClicked(MouseButton.LEFT)) {
 			theBall.addForce(0,1);
 		}
-		if(theBall.isOutsideScreen()) {}
+		if(mouse.justClicked(MouseButton.RIGHT)) {
+			theBall.addForce(0,-1);
+		}
+		if(theBall.isOutsideScreen()) {
+			theBall.resolveOutsideScreen();
+		}
 	}
 	
 	
