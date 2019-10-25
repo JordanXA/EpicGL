@@ -62,7 +62,7 @@ public class ObjectManager {
    
    public static void printNameOfObjectList(List<Object> list) {
 	   for (Object object : list) {
-		   System.out.print(object.getName());
+		   System.out.print(object.getName()+", ");
 	   }
 	   System.out.println();
    }
