@@ -7,32 +7,57 @@ import org.lwjgl.Version;
 
 public abstract class Game {
 	
-	final static int INIT_SCREEN_WIDTH = 1000;
-	final static int INIT_SCREEN_HEIGHT = 1000;
-	private static long window;
-	static Renderer renderer = new Renderer();
-	static ObjectManager objectManager = new ObjectManager();
-	static Mouse mouse;
+	protected static int screenWidth = 640;
+	protected static int screenHeight = 480;
 
-	public static void main(String[] args) {
+	protected static long window;
+	protected static Renderer renderer = new Renderer();
+	protected static ObjectManager objectManager = new ObjectManager();
+	protected static Mouse mouse;
+
+	public Game() {
+		init();
+	}
+	
+	public void init() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-		renderer.init(INIT_SCREEN_WIDTH, INIT_SCREEN_HEIGHT, "Epic!");
+		renderer.init(screenWidth, screenHeight, "Epic!");
 		window = renderer.getWindow();		
 		mouse = new Mouse(window);
-		//start();
+		start();
 		// game loop
 		while (!glfwWindowShouldClose(window)) {
 			glfwPollEvents();
 			mouse.update();
 			objectManager.update();
-			//loop();
+			loop();
 			renderer.draw(objectManager);
 			//TODO: make motion work regardless of framerate.
 		}
 		renderer.cleanup();
 	}
 	
+	public static void setScreenSize(int width, int height) {
+		screenWidth=width;
+		screenHeight=height;
+	}
+	
+	/**
+	 * @return the screen's width
+	 */
+	public static int getScreenWidth() {
+		return screenWidth;
+	}
+
+	/**
+	 * @return the screen's height
+	 */
+	public static int getScreenHeight() {
+		return screenHeight;
+	}
+	
 	public abstract void start();
+	
 	/**
 	 * Before objects are drawn, but after they move.
 	 */

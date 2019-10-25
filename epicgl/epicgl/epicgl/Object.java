@@ -34,7 +34,7 @@ public class Object {
 	   return name;
    }
    
-   public void resetCollisions() {
+   void resetCollisions() {
 	   collidingWith = new ArrayList<Object>();
    }
    
@@ -42,7 +42,7 @@ public class Object {
 	   return collidingWith;
    }
    
-   public void addCollidingObj(Object obj) {
+   void addCollidingObj(Object obj) {
 	   collidingWith.add(obj);
    }
    
@@ -59,7 +59,7 @@ public class Object {
 	   position.y = y;
    }
    
-   public void update() {
+   void update() {
 	   speed.x+=acceleration.x;
 	   speed.y+=acceleration.y;
 	   
@@ -67,7 +67,7 @@ public class Object {
 	   
    }
    
-   public Mesh[] getMeshes() {
+   Mesh[] getMeshes() {
       return meshes;
    }
    
@@ -106,7 +106,7 @@ public class Object {
       updateTransformation();
    }
    
-   public void updateTransformation() {
+   void updateTransformation() {
       tMatrix = new Matrix4f();
       tMatrix.m00(1);
       tMatrix.m11(1);
@@ -117,7 +117,14 @@ public class Object {
       tMatrix.m31(position.y);
    }
    
-   public Matrix4f getTransformation() {
+   Matrix4f getTransformation() {
       return tMatrix;
    }
+   
+   public boolean isOutsideScreen() {
+	   System.out.println("Object "+this.getClass().getName()+" has incomplete isOutsideScreen() method!");
+	   return false;
+   }
+   
+   
 }

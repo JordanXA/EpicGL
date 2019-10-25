@@ -14,7 +14,7 @@ public class Rectangle extends Object {
 		return height;
 	}
 	
-   Rectangle(float x, float y, float width, float height) {
+   public Rectangle(float x, float y, float width, float height) {
       position.x = x;
       position.y = y;
       this.width=width;

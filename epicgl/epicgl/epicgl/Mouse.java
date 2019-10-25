@@ -18,9 +18,6 @@ import static org.lwjgl.opengl.GL40.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-enum buttons {
-	LEFT, RIGHT
-};
 
 public class Mouse {
 	public boolean isDrawing;
@@ -63,10 +60,10 @@ public class Mouse {
 	}
 
 	public void update() {
-		if (clickedLeft && !isClicked(buttons.LEFT)) {
+		if (clickedLeft && !isClicked(MouseButton.LEFT)) {
 			clickedLeft = false;
 		}
-		if (clickedRight && !isClicked(buttons.RIGHT)) {
+		if (clickedRight && !isClicked(MouseButton.RIGHT)) {
 			clickedRight = false;
 		}
 
@@ -88,7 +85,7 @@ public class Mouse {
 
 	private void drawUpdate() {
 
-		if (justClicked(buttons.LEFT)) {
+		if (justClicked(MouseButton.LEFT)) {
 			float vx = (float) mouseXbuffer.get(0);
 			float vy = (float) mouseYbuffer.get(0);
 			vx = (vx / (windowWidth.get(0) / 2)) - 1;
@@ -100,7 +97,7 @@ public class Mouse {
 			newMeshV.add(drawNewVertex);
 			System.out.println("Added Vector to drawing" + mouseXbuffer.get(0) + mouseYbuffer.get(0));
 		}
-		if (justClicked(buttons.RIGHT)) {
+		if (justClicked(MouseButton.RIGHT)) {
 
 			if (newMeshV.size() > 2) {
 				Vector3[] newVertices = new Vector3[newMeshV.size()];
@@ -119,9 +116,9 @@ public class Mouse {
 
 	}
 
-	public boolean justClicked(buttons button) {
-		if (button == buttons.LEFT) {
-			if ((isClicked(buttons.LEFT)) && !clickedLeft) {
+	public boolean justClicked(MouseButton button) {
+		if (button == MouseButton.LEFT) {
+			if ((isClicked(MouseButton.LEFT)) && !clickedLeft) {
 				clickedLeft = true;
 				return true;
 			} else {
@@ -129,8 +126,8 @@ public class Mouse {
 			}
 		}
 
-		else if (button == buttons.RIGHT) {
-			if ((isClicked(buttons.RIGHT)) && !clickedRight) {
+		else if (button == MouseButton.RIGHT) {
+			if ((isClicked(MouseButton.RIGHT)) && !clickedRight) {
 				clickedRight = true;
 				return true;
 			} else {
@@ -143,8 +140,8 @@ public class Mouse {
 		}
 	}
 
-	public boolean isClicked(buttons button) {
-		if (button == buttons.LEFT) {
+	public boolean isClicked(MouseButton button) {
+		if (button == MouseButton.LEFT) {
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 				return true;
 			} else {
@@ -152,7 +149,7 @@ public class Mouse {
 			}
 		}
 
-		else if (button == buttons.RIGHT) {
+		else if (button == MouseButton.RIGHT) {
 			if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
 				return true;
 			} else {

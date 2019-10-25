@@ -3,7 +3,7 @@ package epicgl;
 import org.lwjgl.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Epic {
+public class TestGame {
 
 	private static long window;
 
@@ -38,12 +38,12 @@ public class Epic {
 
 			glfwPollEvents();
 
-			if (mouse.justClicked(buttons.LEFT)) {
+			if (mouse.justClicked(MouseButton.LEFT)) {
 				if(testBool) {testBool=false;}
 				else {testBool=true;}
 			}
 			
-			if (mouse.justClicked(buttons.RIGHT)) {
+			if (mouse.justClicked(MouseButton.RIGHT)) {
 				if(testBool==true) {
 					ObjectManager.printNameOfObjectList(playerBall.getCollisions());
 				}
