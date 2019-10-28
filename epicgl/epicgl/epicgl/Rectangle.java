@@ -58,5 +58,25 @@ public class Rectangle extends Object {
 	   
 	   return bottomRightPos;
    }
+	
+	@Override
+	float leftFromCenter() {
+		return 0.5f*width;
+	}
+	
+	@Override
+	float rightFromCenter() {
+		return 0.5f*width;
+	}
+	
+	@Override
+	float upFromCenter() {
+		return 0.5f*height;
+	}
+	
+	@Override
+	float downFromCenter() {
+		return 0.5f*height;
+	}
    
 }

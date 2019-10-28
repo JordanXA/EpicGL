@@ -27,7 +27,7 @@ public class PongGame extends Game {
 			theBall.addForce(0,-1);
 		}
 		if(theBall.isOutsideScreen()) {
-			theBall.resolveOutsideScreen();
+			theBall.resolveExit(epicgl.Object.ExitBehavior.STOP);
 		}
 	}
 	

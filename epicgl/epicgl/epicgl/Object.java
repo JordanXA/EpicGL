@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-public class Object {
+public abstract class Object {
    protected Mesh[] meshes;
    protected Vector2f position = new Vector2f(0,0);
    protected Vector2f speed = new Vector2f();
@@ -140,14 +140,101 @@ public class Object {
       return tMatrix;
    }
    
+   /**
+    * The distance from the center (origin) of the object to the left of the object
+    */
+   abstract float leftFromCenter();
+   
+   /**
+    * The distance from the center (origin) of the object to the right of the object
+    */
+   abstract float rightFromCenter();
+   
+   /**
+    * The distance from the center (origin) of the object to the top of the object
+    */
+   abstract float upFromCenter();
+   
+   /**
+    * The distance from the center (origin) of the object to the bottom of the object
+    */
+   abstract float downFromCenter();
+   
+   
    public boolean isOutsideScreen() {
-	   System.out.println("Object "+this.getClass().getName()+" has incomplete isOutsideScreen() method!");
-	   return false;
-	   //TODO: change this
+	   boolean touchTop,touchBottom,touchLeft,touchRight;
+	   touchTop = touchBottom = touchLeft = touchRight = false;
+	   
+	   touchTop = position.y+upFromCenter() > Game.screenHeight;
+	   touchBottom = position.y-downFromCenter() < 0;
+	   touchLeft = position.x-leftFromCenter() < 0;
+	   touchRight = position.x+rightFromCenter() > Game.screenWidth;
+	   
+	   return touchTop || touchBottom || touchLeft || touchRight;
    }
    
-   public void exitedScreen(Object.ExitBehavior behavior) {
-	   //TODO: make this execute different methods based on the exit behavior
+   /**
+    * Function to be called if the object has exited the screen
+    * It will execute a different method depending on the exit behavior
+    */
+   public void resolveExit(Object.ExitBehavior behavior) {
+	   if (behavior == Object.ExitBehavior.BOUNCE) {
+		   exitBounce();
+	   }
+	   else if (behavior == Object.ExitBehavior.STOP) {
+		   exitStop();
+	   }
+	   else if (behavior == Object.ExitBehavior.WRAP) {
+		   //exitWrap
+	   }
+	   //else if behavior == Object.ExitBehavior.FREE
+	   //do nothing
+	   
+   }
+   
+   
+   /**
+    * Reverses object motion if outside screen
+    * Basically, will make the object bounce off the screen
+    */
+   public void exitBounce() {
+	   float distTop, distBottom, distLeft, distRight;
+	   
+	   //finds how far the ball is above the screen, below, etc.
+	   distTop = position.y+upFromCenter() - Game.screenHeight;
+	   distBottom = position.y-downFromCenter();
+	   distLeft = position.x-leftFromCenter();
+	   distRight = position.x+rightFromCenter() - Game.screenWidth;
+	   
+	   if(distTop > 0) {}
+	   
+	   //TODO: finish the code
+   }
+   
+   
+   //TODO: makes these methods execute in any object class depending on the ExitBehavior
+   /**
+    * Will prevent object from entering the screen if called, and make it stop moving
+    */
+   public void exitStop() {
+	   float distTop, distBottom, distLeft, distRight;
+	   
+	   boolean STOP = true;
+	   
+	   //finds how far the ball is above the screen, below, etc.
+	   distTop = position.y+upFromCenter() - Game.screenHeight;
+	   distBottom = position.y-downFromCenter();
+	   distLeft = position.x-leftFromCenter();
+	   distRight = position.x+rightFromCenter() - Game.screenWidth;
+	   
+	   //TODO: fix this it bugged :(
+	   
+	   System.out.println(""+upFromCenter()+downFromCenter()+leftFromCenter()+rightFromCenter());
+	   
+	   if(distTop > 0) {position.y=Game.screenHeight-upFromCenter(); if(STOP) speed.y=0;}
+	   if(distBottom > 0) {position.y=0+downFromCenter(); if(STOP) speed.y=0;}
+	   if(distLeft > 0) {position.x=0+leftFromCenter(); if(STOP) speed.x=0;}
+	   if(distRight > 0) {position.x=Game.screenWidth-rightFromCenter(); if(STOP) speed.x=0;}
    }
    
    
