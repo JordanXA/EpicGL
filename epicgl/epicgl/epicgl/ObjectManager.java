@@ -6,20 +6,20 @@ import java.util.ArrayList;
 
 public class ObjectManager {
    
-   private List<Object> objectList = new ArrayList<Object>();
+   private List<GameObject> objectList = new ArrayList<GameObject>();
    
    public void update() {
 	   processCollisions();
-	   for(Object object : objectList) {
+	   for(GameObject object : objectList) {
 		   object.tick();
 	   }
 	   
    }
    
    private void processCollisions() {
-	   for(Object object : objectList) {
+	   for(GameObject object : objectList) {
 		   object.resetCollisions();
-		   for(Object object2 : objectList) {
+		   for(GameObject object2 : objectList) {
 			   //makes sure not to check object for colliding against itself
 			   if(object==object2) {continue;}
 			   else {
@@ -36,12 +36,12 @@ public class ObjectManager {
 	   
    }
    
-   public Object[] getObjectsArray() {
-      Object[] objects = objectList.toArray(new Object[objectList.size()]);
+   public GameObject[] getObjectsArray() {
+      GameObject[] objects = objectList.toArray(new GameObject[objectList.size()]);
       return objects;
    }
    
-   public List<Object> getObjects() {
+   public List<GameObject> getObjects() {
       return objectList;
    }
    
@@ -50,12 +50,12 @@ public class ObjectManager {
     * Any object added via this method will be drawn to the screen, for example.
     * @param newObject
     */
-   public void addObject(Object newObject) {
+   public void addObject(GameObject newObject) {
       objectList.add(newObject);
    }
    
-   public static void printNameOfObjectList(List<Object> list) {
-	   for (Object object : list) {
+   public static void printNameOfObjectList(List<GameObject> list) {
+	   for (GameObject object : list) {
 		   System.out.print(object.getName()+", ");
 	   }
 	   System.out.println();

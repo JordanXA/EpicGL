@@ -1,6 +1,6 @@
 package epicgl;
 
-public class Ball extends Object {
+public class Ball extends GameObject {
 
 	float radius;
 

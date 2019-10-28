@@ -81,7 +81,7 @@ public class Physics {
 	 * @param obj2 The second object, a rectangle or a ball.
 	 * @return Returns true if the two objects intersect, returns false if they do not. (also returns false if one object is not a rectangle or ball)
 	 */
-	public static boolean CollisionTest(Object obj1, Object obj2) {
+	public static boolean CollisionTest(GameObject obj1, GameObject obj2) {
 		boolean output = false;
 		
 		if(obj1 instanceof Rectangle && obj2 instanceof Rectangle) {

@@ -2,7 +2,7 @@ package epicgl;
 
 import org.joml.Vector2f;
 
-public class Rectangle extends Object {
+public class Rectangle extends GameObject {
 
 	float width, height;
 	

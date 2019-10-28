@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-public abstract class Object {
+public abstract class GameObject {
    protected Mesh[] meshes;
    protected Vector2f position = new Vector2f(0,0);
    protected Vector2f speed = new Vector2f();
@@ -15,7 +15,7 @@ public abstract class Object {
    protected float mass;
    protected Vector3 fillColor;
    protected Matrix4f tMatrix;
-   protected List<Object> collidingWith = new ArrayList<Object>();
+   protected List<GameObject> collidingWith = new ArrayList<GameObject>();
    protected String name = new String("Unnamed");
    
    /**
@@ -25,7 +25,7 @@ public abstract class Object {
 	   FREE, STOP, BOUNCE, WRAP
    }
    
-   protected Object() {
+   protected GameObject() {
 	   updateTransformation();
    }
    
@@ -38,14 +38,14 @@ public abstract class Object {
    }
    
    void resetCollisions() {
-	   collidingWith = new ArrayList<Object>();
+	   collidingWith = new ArrayList<GameObject>();
    }
    
-   public List<Object> getCollisions() {
+   public List<GameObject> getCollisions() {
 	   return collidingWith;
    }
    
-   void addCollidingObj(Object obj) {
+   void addCollidingObj(GameObject obj) {
 	   collidingWith.add(obj);
    }
    
@@ -100,6 +100,24 @@ public abstract class Object {
    public void addForce(float forceX, float forceY) {
 	   speed.x+=forceX;
 	   speed.y+=forceY;
+   }
+   
+   
+   public void setSpeed(Vector2f speed) {
+	   this.speed=speed;
+   }
+   
+   public void setSpeed(float speedX, float speedY) {
+	   speed.x=speedX;
+	   speed.y=speedY;
+   }
+   
+   public Vector2f getSpeed() {
+	   return new Vector2f(speed.x,speed.y);
+   }
+   
+   public Vector2f getSpeedReference() {
+	   return speed;
    }
    
    public void move(Vector2f speed) {
@@ -160,7 +178,9 @@ public abstract class Object {
     */
    abstract float downFromCenter();
    
-   
+   /**
+    * @return true or false depending on whether any part of the object is outside the screen
+    */
    public boolean isOutsideScreen() {
 	   boolean touchTop,touchBottom,touchLeft,touchRight;
 	   touchTop = touchBottom = touchLeft = touchRight = false;
@@ -177,14 +197,14 @@ public abstract class Object {
     * Function to be called if the object has exited the screen
     * It will execute a different method depending on the exit behavior
     */
-   public void resolveExit(Object.ExitBehavior behavior) {
-	   if (behavior == Object.ExitBehavior.BOUNCE) {
+   public void resolveExit(GameObject.ExitBehavior behavior) {
+	   if (behavior == GameObject.ExitBehavior.BOUNCE) {
 		   exitBounce();
 	   }
-	   else if (behavior == Object.ExitBehavior.STOP) {
+	   else if (behavior == GameObject.ExitBehavior.STOP) {
 		   exitStop();
 	   }
-	   else if (behavior == Object.ExitBehavior.WRAP) {
+	   else if (behavior == GameObject.ExitBehavior.WRAP) {
 		   //exitWrap
 	   }
 	   //else if behavior == Object.ExitBehavior.FREE
@@ -202,13 +222,14 @@ public abstract class Object {
 	   
 	   //finds how far the ball is above the screen, below, etc.
 	   distTop = position.y+upFromCenter() - Game.screenHeight;
-	   distBottom = position.y-downFromCenter();
-	   distLeft = position.x-leftFromCenter();
+	   distBottom = -1*(position.y-downFromCenter());
+	   distLeft = -1*(position.x-leftFromCenter());
 	   distRight = position.x+rightFromCenter() - Game.screenWidth;
 	   
-	   if(distTop > 0) {}
-	   
-	   //TODO: finish the code
+	   if(distTop > 0) {speed.y=-Math.abs(speed.y);}
+	   if(distBottom > 0) {speed.y=Math.abs(speed.y);}
+	   if(distLeft > 0) {speed.x=Math.abs(speed.x);}
+	   if(distRight > 0) {speed.x=-Math.abs(speed.x);} 
    }
    
    
@@ -223,13 +244,13 @@ public abstract class Object {
 	   
 	   //finds how far the ball is above the screen, below, etc.
 	   distTop = position.y+upFromCenter() - Game.screenHeight;
-	   distBottom = position.y-downFromCenter();
-	   distLeft = position.x-leftFromCenter();
+	   distBottom = -1*(position.y-downFromCenter());
+	   distLeft = -1*(position.x-leftFromCenter());
 	   distRight = position.x+rightFromCenter() - Game.screenWidth;
 	   
 	   //TODO: fix this it bugged :(
 	   
-	   System.out.println(""+upFromCenter()+downFromCenter()+leftFromCenter()+rightFromCenter());
+	   System.out.println(""+distTop+distBottom+distLeft+distRight);
 	   
 	   if(distTop > 0) {position.y=Game.screenHeight-upFromCenter(); if(STOP) speed.y=0;}
 	   if(distBottom > 0) {position.y=0+downFromCenter(); if(STOP) speed.y=0;}

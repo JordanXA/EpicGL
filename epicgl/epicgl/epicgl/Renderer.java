@@ -55,7 +55,7 @@ public class Renderer {
 
 	}
 
-	public void drawObject(Object object) {
+	public void drawObject(GameObject object) {
 		for (int i=0; i<object.getMeshes().length; i++) {
 			//Utils.printMatrix4f(object.getTransformation());
 			drawVao(object.getMeshes()[i].getVao()
