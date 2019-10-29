@@ -1,6 +1,9 @@
 package epicgl;
 
 import java.util.List;
+
+import org.joml.Vector2f;
+
 import java.util.ArrayList;
 
 
@@ -11,7 +14,9 @@ public class ObjectManager {
    public void update() {
 	   processCollisions();
 	   for(GameObject object : objectList) {
-		   if(! object.isOutsideScreen()) object.addForce(Physics.gravity);
+		   Vector2f gravity = new Vector2f(Physics.gravity);
+		   //if(! object.isOutsideScreen())
+		   object.addForce(gravity.mul(1));
 		   object.tick();
 		   
 		   //fun color code
@@ -71,5 +76,11 @@ public class ObjectManager {
 		   System.out.print(object.getName()+", ");
 	   }
 	   System.out.println();
+   }
+   
+   public void setExitBehaviors(GameObject.ExitBehavior behavior) {
+	   for (GameObject object : objectList) {
+		   object.setExitBehavior(behavior);
+	   }
    }
 }

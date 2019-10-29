@@ -1,7 +1,6 @@
 package epicgl;
 
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.Version;
 
@@ -15,6 +14,10 @@ public abstract class Game {
 	protected static ObjectManager objectManager = new ObjectManager();
 	protected static Mouse mouse;
 
+	protected static float now;
+	protected static float lastTime;
+	protected static float delta;
+	
 	public Game() {
 		init();
 	}
@@ -27,6 +30,7 @@ public abstract class Game {
 		start();
 		// game loop
 		while (!glfwWindowShouldClose(window)) {
+			updateTime();
 			glfwPollEvents();
 			mouse.update();
 			objectManager.update();
@@ -35,6 +39,16 @@ public abstract class Game {
 			//TODO: make motion work regardless of framerate.
 		}
 		renderer.cleanup();
+	}
+	
+	public static float getDelta() {
+		return delta;
+	}
+	
+	protected static void updateTime() {
+		now = (float)glfwGetTime();
+		delta = now - lastTime;
+		lastTime = now;
 	}
 	
 	public static void setScreenSize(int width, int height) {

@@ -6,17 +6,20 @@ import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import static epicgl.Game.getDelta;
 
 public abstract class GameObject {
    protected Mesh[] meshes;
    protected Vector2f position = new Vector2f(0,0);
-   protected Vector2f speed = new Vector2f();
+   protected Vector2f velocity = new Vector2f();
    protected Vector2f acceleration = new Vector2f();
    protected float mass;
    protected Vector3 fillColor;
    protected Matrix4f tMatrix;
    protected List<GameObject> collidingWith = new ArrayList<GameObject>();
    protected String name = new String("Unnamed");
+   
+   protected ExitBehavior exitBehavior = GameObject.ExitBehavior.FREE;
    
    /**
     *Settings for the behavior of an object when it exits the screen
@@ -67,13 +70,30 @@ public abstract class GameObject {
     * The method update() is meant to be overridden by child objects, so they can have specific functionality
     */
    final void tick() {
-	   speed.x+=acceleration.x;
-	   speed.y+=acceleration.y;
 	   
-	   move(speed);
+	   
+	   velocity.x+=acceleration.x;
+	   velocity.y+=acceleration.y;
+	   
+	   System.out.println("Acceleration Y="+acceleration.y);
+	   System.out.println("Velocity Y="+velocity.y);
+	   
+	   Vector2f moveVector = new Vector2f(velocity);
+	   moveVector.mul(getDelta());
+	   
+	   move(moveVector);
+	   
+	   System.out.println("Velocity Y="+velocity.y);
 	   
 	   //TODO: add the update(); method to this class, and make it run
 	   //TODO: handle the exit behavior automatically
+	   
+	   acceleration.mul(0);
+
+	   if(isOutsideScreen()) {
+		   resolveExit(exitBehavior);
+	   }
+	   
    }
    
    Mesh[] getMeshes() {
@@ -94,30 +114,30 @@ public abstract class GameObject {
    }
    
    public void addForce(Vector2f force) {
-	   speed=speed.add(force);
+	   acceleration=acceleration.add(force);
    }
    
    public void addForce(float forceX, float forceY) {
-	   speed.x+=forceX;
-	   speed.y+=forceY;
+	   acceleration.x+=forceX;
+	   acceleration.y+=forceY;
    }
    
    
-   public void setSpeed(Vector2f speed) {
-	   this.speed=speed;
+   public void setVelocity(Vector2f speed) {
+	   this.velocity=speed;
    }
    
-   public void setSpeed(float speedX, float speedY) {
-	   speed.x=speedX;
-	   speed.y=speedY;
+   public void setVelocity(float speedX, float speedY) {
+	   velocity.x=speedX;
+	   velocity.y=speedY;
    }
    
-   public Vector2f getSpeed() {
-	   return new Vector2f(speed.x,speed.y);
+   public Vector2f getVelocity() {
+	   return new Vector2f(velocity.x,velocity.y);
    }
    
-   public Vector2f getSpeedReference() {
-	   return speed;
+   public Vector2f getVelocityReference() {
+	   return velocity;
    }
    
    public void move(Vector2f speed) {
@@ -128,11 +148,10 @@ public abstract class GameObject {
    }
    
    public void move(float x, float y) {
-      position.x = x;
-      position.y = y;
+      position.x += x;
+      position.y += y;
       updateTransformation();
    }
-   
    public void setY(float y) {
 	      position.y = y;
 	      updateTransformation();	   
@@ -226,10 +245,10 @@ public abstract class GameObject {
 	   distLeft = -1*(position.x-leftFromCenter());
 	   distRight = position.x+rightFromCenter() - Game.screenWidth;
 	   
-	   if(distTop > 0) {speed.y=-Math.abs(speed.y);}
-	   if(distBottom > 0) {speed.y=Math.abs(speed.y);}
-	   if(distLeft > 0) {speed.x=Math.abs(speed.x);}
-	   if(distRight > 0) {speed.x=-Math.abs(speed.x);} 
+	   if(distTop > 0) {position.y=Game.screenHeight-upFromCenter(); velocity.y=-Math.abs(velocity.y);}
+	   if(distBottom > 0) {position.y=0+downFromCenter(); velocity.y=Math.abs(velocity.y);}
+	   if(distLeft > 0) {position.x=0+leftFromCenter(); velocity.x=Math.abs(velocity.x);}
+	   if(distRight > 0) {position.x=Game.screenWidth-rightFromCenter(); velocity.x=-Math.abs(velocity.x);} 
    }
    
    
@@ -248,15 +267,20 @@ public abstract class GameObject {
 	   distLeft = -1*(position.x-leftFromCenter());
 	   distRight = position.x+rightFromCenter() - Game.screenWidth;
 	   
-	   //TODO: fix this it bugged :(
 	   
-	   System.out.println(""+distTop+distBottom+distLeft+distRight);
-	   
-	   if(distTop > 0) {position.y=Game.screenHeight-upFromCenter(); if(STOP) speed.y=0;}
-	   if(distBottom > 0) {position.y=0+downFromCenter(); if(STOP) speed.y=0;}
-	   if(distLeft > 0) {position.x=0+leftFromCenter(); if(STOP) speed.x=0;}
-	   if(distRight > 0) {position.x=Game.screenWidth-rightFromCenter(); if(STOP) speed.x=0;}
+	   if(distTop > 0) {position.y=Game.screenHeight-upFromCenter(); if(STOP) velocity.y=0;}
+	   if(distBottom > 0) {position.y=0+downFromCenter(); if(STOP) velocity.y=0;}
+	   if(distLeft > 0) {position.x=0+leftFromCenter(); if(STOP) velocity.x=0;}
+	   if(distRight > 0) {position.x=Game.screenWidth-rightFromCenter(); if(STOP) velocity.x=0;}
    }
+	
+	public void setExitBehavior(ExitBehavior behavior) {
+		exitBehavior=behavior;
+	}
+
+	public float getMass() {
+		return mass;
+	}
    
    
 }
