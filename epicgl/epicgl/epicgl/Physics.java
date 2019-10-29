@@ -11,6 +11,9 @@ import java.lang.Math;
  */
 public class Physics {
 	
+	public static Vector2f gravity = new Vector2f(0,0);
+	public static float friction;
+	
 	/**
 	 * Checks whether or not two rectangle objects are colliding.
 	 * @param rect1 The first rectangle
