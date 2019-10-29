@@ -22,13 +22,13 @@ public class PongGame extends Game {
 
 	@Override
 	public void start() {
-		Physics.gravity = new Vector2f(0,-25);
+		Physics.gravity = new Vector2f(0,0);
 		theBall = new Ball(500f, 500f, 25f);
 		theBall2 = new Ball(600f, 200f, 50f);
 		theRect = new Rectangle(200f,500f,200f,250f);
 		theRect2 = new Rectangle(50f,50f, 100f, 100f);
 		objectManager.addObject(theRect);
-		objectManager.addObject(theBall);
+		objectManager.addObject(theBall); theBall.setName("test");
 		objectManager.addObject(theBall2);
 		objectManager.addObject(theRect2);
 		objectManager.setExitBehaviors(epicgl.GameObject.ExitBehavior.BOUNCE);
@@ -38,16 +38,16 @@ public class PongGame extends Game {
 	@Override
 	public void loop() {
 		if(glfwGetKey(window, GLFW_KEY_UP) != 0) {
-			theBall2.addForce(0,50);
+			theBall2.addForce(0,1000);
 		}
 		if(glfwGetKey(window, GLFW_KEY_DOWN) != 0) {
-			theBall2.addForce(0,-50);
+			theBall2.addForce(0,-1000);
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT) != 0) {
-			theBall2.addForce(-50,0);
+			theBall2.addForce(-1000,0);
 		}
 		if (glfwGetKey(window,GLFW_KEY_RIGHT) != 0) {
-			theBall2.addForce(50,0);
+			theBall2.addForce(1000,0);
 		}
 		
 		if(glfwGetKey(window, GLFW_KEY_W) != 0) {

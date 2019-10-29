@@ -42,6 +42,7 @@ public abstract class Game {
 	}
 	
 	public static float getDelta() {
+		System.out.println(delta);
 		return delta;
 	}
 	

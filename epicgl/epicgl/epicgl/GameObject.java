@@ -72,18 +72,19 @@ public abstract class GameObject {
    final void tick() {
 	   
 	   
-	   velocity.x+=acceleration.x;
-	   velocity.y+=acceleration.y;
+	   velocity.x+=acceleration.x*getDelta();
+	   velocity.y+=acceleration.y*getDelta();
 	   
-	   System.out.println("Acceleration Y="+acceleration.y);
-	   System.out.println("Velocity Y="+velocity.y);
+	   if(getName().equals("test")) {
+		   System.out.println("Acceleration Y="+acceleration.y);
+		   System.out.println("Velocity Y="+velocity.y);
+	   }
 	   
 	   Vector2f moveVector = new Vector2f(velocity);
 	   moveVector.mul(getDelta());
 	   
 	   move(moveVector);
 	   
-	   System.out.println("Velocity Y="+velocity.y);
 	   
 	   //TODO: add the update(); method to this class, and make it run
 	   //TODO: handle the exit behavior automatically
