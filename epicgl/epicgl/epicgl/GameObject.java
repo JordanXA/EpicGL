@@ -70,15 +70,8 @@ public abstract class GameObject {
     * The method update() is meant to be overridden by child objects, so they can have specific functionality
     */
    final void tick() {
-	   
-	   
 	   velocity.x+=acceleration.x*getDelta();
 	   velocity.y+=acceleration.y*getDelta();
-	   
-	   if(getName().equals("test")) {
-		   System.out.println("Acceleration Y="+acceleration.y);
-		   System.out.println("Velocity Y="+velocity.y);
-	   }
 	   
 	   Vector2f moveVector = new Vector2f(velocity);
 	   moveVector.mul(getDelta());
@@ -92,8 +85,11 @@ public abstract class GameObject {
 	   acceleration.mul(0);
 
 	   if(isOutsideScreen()) {
+		   //System.out.print("Outside");
 		   resolveExit(exitBehavior);
+		   Physics.applyFriction(this);
 	   }
+	   Physics.applyDrag(this);
 	   
    }
    
@@ -115,12 +111,12 @@ public abstract class GameObject {
    }
    
    public void addForce(Vector2f force) {
-	   acceleration=acceleration.add(force);
+	   acceleration.add(force.mul(1/mass));
    }
    
    public void addForce(float forceX, float forceY) {
-	   acceleration.x+=forceX;
-	   acceleration.y+=forceY;
+	   acceleration.x+=forceX/mass;
+	   acceleration.y+=forceY/mass;
    }
    
    

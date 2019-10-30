@@ -16,7 +16,7 @@ public class ObjectManager {
 	   for(GameObject object : objectList) {
 		   Vector2f gravity = new Vector2f(Physics.gravity);
 		   //if(! object.isOutsideScreen())
-		   object.addForce(gravity.mul(1));
+		   object.addForce(gravity.mul(object.getMass()));
 		   object.tick();
 		   
 		   //fun color code

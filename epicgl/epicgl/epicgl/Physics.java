@@ -12,7 +12,8 @@ import java.lang.Math;
 public class Physics {
 	
 	public static Vector2f gravity = new Vector2f(0,0);
-	public static float friction;
+	public static float friction = 0;
+	public static float drag = 0;
 	
 	/**
 	 * Checks whether or not two rectangle objects are colliding.
@@ -105,5 +106,41 @@ public class Physics {
 		}
 		
 		return output;
+	}
+	
+	/**
+	 * Applies friction to an object, using the default friction of the physics class set in the game.
+	 * @see <a href="https://natureofcode.com/book/chapter-2-forces/">Nature of Code - Forces</a>
+	 * @param obj The Object to apply friction to
+	 */
+	public static void applyFriction(GameObject obj) {
+		Vector2f frictionVector = obj.getVelocity();
+		frictionVector.normalize();
+		frictionVector.mul(-1);
+		
+		float normal = 1;
+		float frictionMag = normal*friction;
+		
+		frictionVector.mul(frictionMag);
+		//TODO: change friction object code to make it more complex than just checking if its a ball
+		if(obj.getClass()==Ball.class) {
+			frictionVector.mul(0.2f);
+		}
+		
+		obj.addForce(frictionVector);
+		
+	}
+	
+	public static void applyDrag(GameObject obj) {
+		
+		float speedSquared = obj.getVelocity().lengthSquared();
+		
+		float dragMagnitude = drag*speedSquared;
+		
+		Vector2f dragVector = obj.getVelocity();
+		dragVector.mul(-1);
+		dragVector.normalize();
+		dragVector.mul(dragMagnitude);
+		obj.addForce(dragVector);
 	}
 }

@@ -6,6 +6,8 @@ import org.lwjgl.Version;
 
 public abstract class Game {
 	
+	static float MASS_MULT = 0.00001f;
+	
 	protected static int screenWidth = 640;
 	protected static int screenHeight = 480;
 
@@ -31,6 +33,7 @@ public abstract class Game {
 		// game loop
 		while (!glfwWindowShouldClose(window)) {
 			updateTime();
+			System.out.println(delta);
 			glfwPollEvents();
 			mouse.update();
 			objectManager.update();
@@ -42,7 +45,6 @@ public abstract class Game {
 	}
 	
 	public static float getDelta() {
-		System.out.println(delta);
 		return delta;
 	}
 	

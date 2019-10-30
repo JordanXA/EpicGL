@@ -17,7 +17,8 @@ public class Ball extends GameObject {
 	      meshes = new Mesh[]{new CircleMesh(this.radius)};
 	      updateTransformation();
 	      
-	      mass=0.01f*(float)Math.PI*radius*radius;
+	      mass=Game.MASS_MULT*(float)Math.PI*radius*radius;
+	      System.out.println(mass);
 	   }
    
    public float getRadius() {

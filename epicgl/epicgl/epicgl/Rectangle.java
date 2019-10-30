@@ -27,7 +27,7 @@ public class Rectangle extends GameObject {
       meshes = new Mesh[]{new Mesh(rectVerts)};
       updateTransformation();
       
-      mass = width*height;
+      mass = Game.MASS_MULT*width*height;
    }
    
    /**
