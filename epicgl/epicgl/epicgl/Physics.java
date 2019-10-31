@@ -137,6 +137,10 @@ public class Physics {
 		
 		float dragMagnitude = drag*speedSquared;
 		
+		//TODO: if you set drag too high (>0.01f), this will give out ridiculous values
+		//it is a bug that needs to be fixed
+		//System.out.println(dragMagnitude);
+		
 		Vector2f dragVector = obj.getVelocity();
 		dragVector.mul(-1);
 		dragVector.normalize();

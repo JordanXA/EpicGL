@@ -24,7 +24,7 @@ public class PongGame extends Game {
 	public void start() {
 		Physics.gravity = new Vector2f(0,-500);
 		Physics.friction = 25;
-		Physics.drag = -0f;
+		Physics.drag = .00001f;
 		theBall = new Ball(500f, 500f, 25f);
 		theBall2 = new Ball(600f, 500f, 25f);
 		theRect = new Rectangle(200f,500f,200f,250f);

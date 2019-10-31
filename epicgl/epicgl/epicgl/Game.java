@@ -30,6 +30,7 @@ public abstract class Game {
 		window = renderer.getWindow();		
 		mouse = new Mouse(window);
 		start();
+		warnings();
 		// game loop
 		while (!glfwWindowShouldClose(window)) {
 			updateTime();
@@ -49,6 +50,7 @@ public abstract class Game {
 	}
 	
 	protected static void updateTime() {
+		//TODO: I need to change the delta time system. When the game starts, it usually has a weird framerate, and objects spazz out and stuff ocassionally.
 		now = (float)glfwGetTime();
 		delta = now - lastTime;
 		lastTime = now;
@@ -80,5 +82,10 @@ public abstract class Game {
 	 */
 	public abstract void loop();
 	
+	protected void warnings() {
+		if (Physics.drag>=0.01f) {
+			System.out.println("Setting the drag higher than 0.01 tends to lead to issues... this is a bug that needs to be fixed by Jordan. Sorry!");
+		}
+	}
 
 }

@@ -82,6 +82,7 @@ public abstract class GameObject {
 	   //TODO: add the update(); method to this class, and make it run
 	   //TODO: handle the exit behavior automatically
 	   
+	   
 	   acceleration.mul(0);
 
 	   if(isOutsideScreen()) {
