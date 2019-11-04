@@ -21,6 +21,7 @@ public abstract class GameObject {
    
    protected ExitBehavior exitBehavior = GameObject.ExitBehavior.FREE;
    
+   
    /**
     *Settings for the behavior of an object when it exits the screen
     */
@@ -70,6 +71,7 @@ public abstract class GameObject {
     * The method update() is meant to be overridden by child objects, so they can have specific functionality
     */
    final void tick() {
+	   
 	   velocity.x+=acceleration.x*getDelta();
 	   velocity.y+=acceleration.y*getDelta();
 	   
@@ -78,19 +80,18 @@ public abstract class GameObject {
 	   
 	   move(moveVector);
 	   
-	   
-	   //TODO: add the update(); method to this class, and make it run
-	   //TODO: handle the exit behavior automatically
-	   
+	   onUpdate();
 	   
 	   acceleration.mul(0);
 
+
+	   Physics.applyDrag(this);
 	   if(isOutsideScreen()) {
 		   //System.out.print("Outside");
-		   resolveExit(exitBehavior);
+
 		   Physics.applyFriction(this);
+		   resolveExit(exitBehavior);
 	   }
-	   Physics.applyDrag(this);
 	   
    }
    
@@ -173,6 +174,14 @@ public abstract class GameObject {
    
    Matrix4f getTransformation() {
       return tMatrix;
+   }
+   
+   /**
+    * A method for custom objects, that is called every frame.
+    * Override this method.
+    */
+   protected void onUpdate() {
+	   
    }
    
    /**

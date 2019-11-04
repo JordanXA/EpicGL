@@ -114,37 +114,42 @@ public class Physics {
 	 * @param obj The Object to apply friction to
 	 */
 	public static void applyFriction(GameObject obj) {
-		Vector2f frictionVector = obj.getVelocity();
-		frictionVector.normalize();
-		frictionVector.mul(-1);
-		
-		float normal = 1;
-		float frictionMag = normal*friction;
-		
-		frictionVector.mul(frictionMag);
-		//TODO: change friction object code to make it more complex than just checking if its a ball
-		if(obj.getClass()==Ball.class) {
-			frictionVector.mul(0.2f);
+		if (friction != 0) {
+			Vector2f frictionVector = obj.getVelocity();
+			frictionVector.normalize();
+			frictionVector.mul(-1);
+			
+			float normal = 1;
+			float frictionMag = normal*friction;
+			
+			frictionVector.mul(frictionMag);
+			//TODO: change friction object code to make it more complex than just checking if its a ball
+			if(obj.getClass()==Ball.class) {
+				frictionVector.mul(0.2f);
+			}
+			
+			obj.addForce(frictionVector);
 		}
-		
-		obj.addForce(frictionVector);
-		
+
 	}
 	
 	public static void applyDrag(GameObject obj) {
 		
-		float speedSquared = obj.getVelocity().lengthSquared();
-		
-		float dragMagnitude = drag*speedSquared;
-		
-		//TODO: if you set drag too high (>0.01f), this will give out ridiculous values
-		//it is a bug that needs to be fixed
-		//System.out.println(dragMagnitude);
-		
-		Vector2f dragVector = obj.getVelocity();
-		dragVector.mul(-1);
-		dragVector.normalize();
-		dragVector.mul(dragMagnitude);
-		obj.addForce(dragVector);
+		if (drag != 0) {
+			float speedSquared = obj.getVelocity().lengthSquared();
+			
+			float dragMagnitude = drag*speedSquared;
+			
+			//TODO: if you set drag too high (>0.01f), this will give out ridiculous values
+			//it is a bug that needs to be fixed
+			//System.out.println(dragMagnitude);
+			
+			Vector2f dragVector = obj.getVelocity();
+			dragVector.mul(-1);
+			dragVector.normalize();
+			dragVector.mul(dragMagnitude);
+			obj.addForce(dragVector);
+		}
+
 	}
 }

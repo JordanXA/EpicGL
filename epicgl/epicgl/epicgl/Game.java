@@ -1,6 +1,7 @@
 package epicgl;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glClearColor;
 
 import org.lwjgl.Version;
 
@@ -45,8 +46,16 @@ public abstract class Game {
 		renderer.cleanup();
 	}
 	
+	public static long getWindow() {
+		return window;
+	}
+	
 	public static float getDelta() {
 		return delta;
+	}
+	
+	public void setFillColor(Vector3 color) {
+		glClearColor(color.x,color.y,color.z,0f);
 	}
 	
 	protected static void updateTime() {

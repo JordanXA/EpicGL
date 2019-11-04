@@ -39,6 +39,11 @@ public class Renderer {
 	public long getWindow() {
 		return window;
 	}
+	
+	/*
+	public void setFillColor(Vector3 color) {
+		glClearColor(color.x,color.y,color.z,0f);
+	}*/
 
 	public void draw(ObjectManager objMan) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -211,7 +216,7 @@ public class Renderer {
 		glfwShowWindow(window);
 
 		GL.createCapabilities();
-		glClearColor(0.8f,0.9f,1.0f,0.0f);
+		glClearColor(1f,1f,1f,0f);
 
 		// After glfwMakeContextCurrent() and createCapabilities():
 		Callback debugProc = GLUtil.setupDebugMessageCallback();
