@@ -21,7 +21,7 @@ public class Physics {
 	 * @param rect2 The second rectangle
 	 * @return Returns true if the two rectangles intersect, false if they do not.
 	 */
-	public static boolean CollisionTest(Rectangle rect1, Rectangle rect2) {
+	public static boolean collisionTestRR(Rectangle rect1, Rectangle rect2) {
 		
 		//Tests for intersection on the X axis
 		boolean collisionX = !( Math.abs(rect1.getPosition().x - rect2.getPosition().x ) > ( rect1.getWidth()/2 + rect2.getWidth()/2 ) );
@@ -39,7 +39,7 @@ public class Physics {
 	 * @param ball2 The second ball
 	 * @return Returns true if the two balls intersect, false if they do not.
 	 */
-	public static boolean CollisionTest(Ball ball1, Ball ball2) {
+	public static boolean collisionTestBB(Ball ball1, Ball ball2) {
 		
 		//the objects touch if the distance between them is less than or equal to both of their radii added together.
 		float r1 = ball1.getRadius();
@@ -59,7 +59,7 @@ public class Physics {
 	 * @param ball2 A ball
 	 * @return Returns true if the rectangle and ball intersect, false if they do not.
 	 */
-	public static boolean CollisionTest(Rectangle rect1, Ball ball2) {
+	public static boolean collisionTestRB(Rectangle rect1, Ball ball2) {
 		Vector2f rectPos = rect1.getPosition();
 		Vector2f ballPos = ball2.getPosition();
 		
@@ -85,20 +85,20 @@ public class Physics {
 	 * @param obj2 The second object, a rectangle or a ball.
 	 * @return Returns true if the two objects intersect, returns false if they do not. (also returns false if one object is not a rectangle or ball)
 	 */
-	public static boolean CollisionTest(GameObject obj1, GameObject obj2) {
+	public static boolean collisionTest(GameObject obj1, GameObject obj2) {
 		boolean output = false;
 		
 		if(obj1 instanceof Rectangle && obj2 instanceof Rectangle) {
-			output = CollisionTest((Rectangle)obj1, (Rectangle)obj2);
+			output = collisionTestRR((Rectangle)obj1, (Rectangle)obj2);
 		}
 		else if(obj1 instanceof Ball && obj2 instanceof Ball) {
-			output = CollisionTest((Ball)obj1, (Ball)obj2);
+			output = collisionTestBB((Ball)obj1, (Ball)obj2);
 		}
 		else if(obj1 instanceof Rectangle && obj2 instanceof Ball) {
-			output = CollisionTest((Rectangle)obj1, (Ball)obj2);
+			output = collisionTestRB((Rectangle)obj1, (Ball)obj2);
 		}
 		else if(obj1 instanceof Ball && obj2 instanceof Rectangle) {
-			output = CollisionTest((Rectangle)obj2, (Ball)obj1);
+			output = collisionTestRB((Rectangle)obj2, (Ball)obj1);
 		}
 		else {
 			System.out.println("Tested objects were not valid types!");
@@ -152,4 +152,74 @@ public class Physics {
 		}
 
 	}
+	
+	public static void collisionResolve(GameObject obj1, GameObject obj2) {
+		
+		if(obj1 instanceof Rectangle && obj2 instanceof Rectangle) {
+			//collisionResolveRR((Rectangle)obj1, (Rectangle)obj2);
+		}
+		else if(obj1 instanceof Ball && obj2 instanceof Ball) {
+			dynamicResolveBB((Ball)obj1,(Ball)obj2);
+		}
+		else if(obj1 instanceof Rectangle && obj2 instanceof Ball) {
+			//collisionResolveRB((Rectangle)obj1,(Ball)obj2);
+		}
+		else if(obj1 instanceof Ball && obj2 instanceof Rectangle) {
+			//collisionResolveRB((Rectangle)obj2,(Ball)obj1);
+		}
+		else {
+			System.out.println("Colliding objects were not valid types!");
+		}
+	}
+	
+	//TODO: not done
+	static void staticResolveBB(Ball ball1, Ball ball2) {
+		float distanceSquared = getDistanceSquared(ball1.getPosition(), ball2.getPosition());
+		
+		//float offset = distanceStance - (ball1.getRadius()+ball2.getRadius());
+		
+		//the difference between the two positions, basically, an arrow pointing in the direction of the collision
+		//this is the Collision Normal
+		Vector2f normal = new Vector2f(ball1.getPosition().x - ball2.getPosition().x, ball1.getPosition().y - ball2.getPosition().y);
+		normal.normalize(); //we don't care about magnitude
+	}
+	
+	/**
+	 * @see <a href="https://youtu.be/LPzyNOHY3A4">Programming Balls #1 Circle Vs Circle Collisions C++ by javidx9</a>
+	 * @param ball1
+	 * @param ball2
+	 */
+	static void dynamicResolveBB(Ball ball1, Ball ball2) {
+		
+		Vector2f velocity1, velocity2;
+		velocity1 = ball1.getVelocity();
+		velocity2 = ball2.getVelocity();
+		
+		
+		//the difference in momentum between the two balls, after they collide
+		//Vector2f deltaP = new Vector2f();
+		
+		//the difference between the two positions, basically, an arrow pointing in the direction of the collision
+		//this is the Collision Normal
+		Vector2f normal = new Vector2f(ball1.getPosition().x - ball2.getPosition().x, ball1.getPosition().y - ball2.getPosition().y);
+		normal.normalize(); //we don't care about magnitude
+		
+		//perpendicular to the normal
+		Vector2f tangent = new Vector2f(-1*normal.y, normal.x);
+		
+		//dot product of the velocity of each ball and the tangent
+		float dpvt1 = velocity1.x * tangent.x + velocity1.y * tangent.y;
+		float dpvt2 = velocity2.x * tangent.x + velocity2.y * tangent.y;
+		
+		ball1.setVelocity(tangent.x*dpvt1, tangent.y*dpvt1);
+		ball2.setVelocity(tangent.x*dpvt2, tangent.y*dpvt2);
+		
+	}
+	
+	public static float getDistanceSquared(Vector2f pos1, Vector2f pos2) {
+		//the distance formula is d = sqrt( (x2-x1)^2 + (y2-y1)^2 )
+		float distanceSquared = (float) Math.pow((pos2.x - pos1.x),2) + (float) Math.pow((pos2.y - pos1.y),2);
+		return distanceSquared;
+	}
+	
 }

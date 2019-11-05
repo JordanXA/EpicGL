@@ -20,34 +20,36 @@ public class ObjectManager {
 		   object.tick();
 		   
 		   //fun color code
-		   /*if (object.getCollisions().size()>0) {
+		   ///*
+		   if (object.getCollisions().size()>0) {
 			   object.fillObject(new Vector3(0.95f,0f,0f));
 		   }
 		   else {
 			   object.fillObject(new Vector3(0.5f,0.5f,0.5f));
 		   }
-		   object.resetCollisions();
-		   */
-		   //fun color code
+		   //*/
 		   
+		   
+		   //fun color code
+		   object.resetCollisions();
 	   }
 	   
    }
    
    private void processCollisions() {
-	   for(GameObject object : objectList) {
-		   object.resetCollisions();
-		   for(GameObject object2 : objectList) {
-			   //makes sure not to check object for colliding against itself
-			   if(object==object2) {continue;}
-			   else {
-				   if (Physics.CollisionTest(object, object2)) {
-					   object.addCollidingObj(object2);
-					   //TODO: make this not check twice per pair, because atm it does that
-					   //TODO: after that is done, it will need to add object 1 to object 2's colliding list, presumably
-				   }
+	   for(int i = 0; i <objectList.size(); i++) {
+		   //objectList.get(i).resetCollisions(); was breaking code
+		   for(int k = 0; k<objectList.size(); k++) {
+			   //makes sure not to check object for colliding against itself or any object already checked
+			   if(k<=i) {continue;}
+			   GameObject object1 = objectList.get(i);
+			   GameObject object2 = objectList.get(k);
+			   
+			   if (Physics.collisionTest(object1, object2)) {
+				   object1.addCollidingObj(object2);
+				   object2.addCollidingObj(object1);
+				   Physics.collisionResolve(object1, object2);
 			   }
-			   //cnt:;
 		   }
 		   
 	   }

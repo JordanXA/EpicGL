@@ -68,7 +68,7 @@ public abstract class GameObject {
    
    /**
     * An update function common for all objects of the object class
-    * The method update() is meant to be overridden by child objects, so they can have specific functionality
+    * The method onUpdate() is meant to be overridden by child objects, so they can have specific functionality
     */
    final void tick() {
 	   
