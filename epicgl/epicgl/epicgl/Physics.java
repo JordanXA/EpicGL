@@ -159,6 +159,7 @@ public class Physics {
 			//collisionResolveRR((Rectangle)obj1, (Rectangle)obj2);
 		}
 		else if(obj1 instanceof Ball && obj2 instanceof Ball) {
+			staticResolveBB((Ball) obj1, (Ball) obj2);
 			dynamicResolveBB((Ball)obj1,(Ball)obj2);
 		}
 		else if(obj1 instanceof Rectangle && obj2 instanceof Ball) {
@@ -176,16 +177,33 @@ public class Physics {
 	static void staticResolveBB(Ball ball1, Ball ball2) {
 		float distanceSquared = getDistanceSquared(ball1.getPosition(), ball2.getPosition());
 		
-		//float offset = distanceStance - (ball1.getRadius()+ball2.getRadius());
+		float offset = (float) Math.sqrt(distanceSquared) - (ball1.getRadius()+ball2.getRadius());
+		
+		float massSum = ball1.getMass()+ball2.getMass();
+		float massRatio1 = ball2.getMass()/massSum;
+		float massRatio2 = ball1.getMass()/massSum;
 		
 		//the difference between the two positions, basically, an arrow pointing in the direction of the collision
 		//this is the Collision Normal
 		Vector2f normal = new Vector2f(ball1.getPosition().x - ball2.getPosition().x, ball1.getPosition().y - ball2.getPosition().y);
 		normal.normalize(); //we don't care about magnitude
+		
+		Vector2f newPos1 = new Vector2f(ball1.getPosition());
+		newPos1.sub(new Vector2f(normal).mul(offset)); //TODO: make this use mass?
+		
+		Vector2f newPos2 = new Vector2f(ball2.getPosition());
+		newPos2.add(new Vector2f(normal).mul(offset)); //TODO: make this use mass?
+		
+		ball1.setPosition(newPos1);
+		ball2.setPosition(newPos2);
+		
+		//ball1.setVelocity(0, 0);
+		//ball2.setVelocity(0, 0);
+		
 	}
 	
 	/**
-	 * @see <a href="https://youtu.be/LPzyNOHY3A4">Programming Balls #1 Circle Vs Circle Collisions C++ by javidx9</a>
+	 * ):<
 	 * @param ball1
 	 * @param ball2
 	 */
@@ -195,7 +213,6 @@ public class Physics {
 		velocity1 = ball1.getVelocity();
 		velocity2 = ball2.getVelocity();
 		
-		
 		//the difference in momentum between the two balls, after they collide
 		//Vector2f deltaP = new Vector2f();
 		
@@ -204,6 +221,7 @@ public class Physics {
 		Vector2f normal = new Vector2f(ball1.getPosition().x - ball2.getPosition().x, ball1.getPosition().y - ball2.getPosition().y);
 		normal.normalize(); //we don't care about magnitude
 		
+		/*
 		//perpendicular to the normal
 		Vector2f tangent = new Vector2f(-1*normal.y, normal.x);
 		
@@ -213,6 +231,19 @@ public class Physics {
 		
 		ball1.setVelocity(tangent.x*dpvt1, tangent.y*dpvt1);
 		ball2.setVelocity(tangent.x*dpvt2, tangent.y*dpvt2);
+		*/
+		
+		float a1 = velocity1.x * normal.x + velocity1.y * normal.y;
+		float a2 = velocity2.x * normal.x + velocity2.y * normal.y;
+		float optimizedP = (2.0f * (a1-a2) / (ball1.getMass()+ball2.getMass()));
+		
+        ///calculating the final velocity vectors to apply to the two objects
+        Vector2f newVelocity1 = new Vector2f(velocity1).sub( (new Vector2f(normal).mul((optimizedP * ball1.getMass()))));
+        Vector2f newVelocity2 = new Vector2f(velocity2).add( (new Vector2f(normal).mul((optimizedP * ball2.getMass()))));
+
+        ///giving the two objects their new velocities after the collision
+        ball1.setVelocity(newVelocity1);
+        ball2.setVelocity(newVelocity2);
 		
 	}
 	

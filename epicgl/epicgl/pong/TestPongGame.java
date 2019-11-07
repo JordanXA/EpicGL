@@ -22,9 +22,9 @@ public class TestPongGame extends Game {
 
 	@Override
 	public void start() {
-		Physics.gravity = new Vector2f(0,-200);
-		Physics.friction = 25;
-		Physics.drag = .00001f;
+		Physics.gravity = new Vector2f(0,-20);
+		Physics.friction = 0;
+		Physics.drag = .0000f;
 		theBall = new Ball(500f, 500f, 25f);
 		theBall2 = new Ball(600f, 500f, 25f);
 		theRect = new Rectangle(200f,500f,200f,250f);
@@ -33,7 +33,7 @@ public class TestPongGame extends Game {
 		objectManager.addObject(theBall); theBall.setName("test");
 		objectManager.addObject(theBall2);
 		objectManager.addObject(theRect2);
-		objectManager.setExitBehaviors(epicgl.GameObject.ExitBehavior.STOP);
+		objectManager.setExitBehaviors(epicgl.GameObject.ExitBehavior.BOUNCE);
 		
 	}
 
