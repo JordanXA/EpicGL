@@ -163,10 +163,10 @@ public class Physics {
 			dynamicResolveBB((Ball)obj1,(Ball)obj2);
 		}
 		else if(obj1 instanceof Rectangle && obj2 instanceof Ball) {
-			//collisionResolveRB((Rectangle)obj1,(Ball)obj2);
+			bounceRB((Rectangle) obj1, (Ball) obj2);
 		}
 		else if(obj1 instanceof Ball && obj2 instanceof Rectangle) {
-			//collisionResolveRB((Rectangle)obj2,(Ball)obj1);
+			bounceRB((Rectangle) obj2, (Ball) obj1);
 		}
 		else {
 			System.out.println("Colliding objects were not valid types!");
@@ -238,8 +238,8 @@ public class Physics {
 		float optimizedP = (2.0f * (a1-a2) / (ball1.getMass()+ball2.getMass()));
 		
         ///calculating the final velocity vectors to apply to the two objects
-        Vector2f newVelocity1 = new Vector2f(velocity1).sub( (new Vector2f(normal).mul((optimizedP * ball1.getMass()))));
-        Vector2f newVelocity2 = new Vector2f(velocity2).add( (new Vector2f(normal).mul((optimizedP * ball2.getMass()))));
+        Vector2f newVelocity1 = new Vector2f(velocity1).sub( (new Vector2f(normal).mul((optimizedP * ball2.getMass()))));
+        Vector2f newVelocity2 = new Vector2f(velocity2).add( (new Vector2f(normal).mul((optimizedP * ball1.getMass()))));
 
         ///giving the two objects their new velocities after the collision
         ball1.setVelocity(newVelocity1);
@@ -251,6 +251,64 @@ public class Physics {
 		//the distance formula is d = sqrt( (x2-x1)^2 + (y2-y1)^2 )
 		float distanceSquared = (float) Math.pow((pos2.x - pos1.x),2) + (float) Math.pow((pos2.y - pos1.y),2);
 		return distanceSquared;
+	}
+	
+	
+	/**
+	 * Bounces a ball against a rectangle (for pong)
+	 * @param rect1 A rectangle
+	 * @param ball2 A ball
+	 * @see <a href="https://stackoverflow.com/a/45373126">Circle/rectangle collision response answered by cdo256</a>
+	 */
+	public static void bounceRB(Rectangle rect1, Ball ball2) {
+		Vector2f rectPos = rect1.getPosition();
+		Vector2f ballPos = ball2.getPosition();
+		
+		float halfWidth = 0.5f*rect1.getWidth();
+		float halfHeight = 0.5f*rect1.getHeight();
+		
+		
+		//find the point on the rectangle nearest the center of the circle
+		float nearX = (float) (Math.max(rectPos.x-halfWidth, Math.min(ballPos.x, rectPos.x + halfWidth ) ));
+		float nearY = (float) (Math.max(rectPos.y-halfHeight, Math.min(ballPos.y, rectPos.y + halfHeight ) ));
+		
+		//finds the distance between the circle and the nearest point
+		//float deltaX = ballPos.x - nearX;
+		//float deltaY = ballPos.y - nearY;
+		
+		Vector2f delta = new Vector2f(ballPos.x - nearX, ballPos.y - nearY);
+
+		if (ball2.getVelocity().dot(delta) < 0) { //if circle is moving toward the rect
+			Vector2f dnormal = new Vector2f(- delta.y, delta.x);
+			
+			double normal_angle = Math.atan2(dnormal.y, dnormal.x);
+			double incoming_angle = Math.atan2(ball2.getVelocity().y, ball2.getVelocity().x);
+			double theta = normal_angle - incoming_angle;
+			ball2.setVelocity(rotateVector(ball2.getVelocity(),(2*theta)));
+		}
+		
+		float penetrationDepth = ball2.getRadius() - delta.length();
+		Vector2f penetrationVector = delta.normalize().mul(penetrationDepth);
+		ball2.setPosition(ball2.getPosition().add(penetrationVector));
+		
+	}
+
+	/**
+	 * @see <a href="https://en.wikipedia.org/wiki/Rotation_matrix">Rotation matrix - Wikipedia, the free encyclopedia</a>
+	 * @param vector
+	 * @param d
+	 * @return the rotated vector
+	 */
+	private static Vector2f rotateVector(Vector2f vector, double theta) {
+		float x = vector.x;
+		float y = vector.y;
+		
+		Vector2f newVector = new Vector2f(
+				(float)(x*Math.cos(theta)) - (float)(y*Math.sin(theta)),
+				(float)(x*Math.sin(theta)) + (float)(y*Math.cos(theta))
+				);
+		
+		return newVector;
 	}
 	
 }

@@ -7,6 +7,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
+import static java.lang.Math.random;
 
 public class TestPongGame extends Game {
 	
@@ -22,9 +23,9 @@ public class TestPongGame extends Game {
 
 	@Override
 	public void start() {
-		Physics.gravity = new Vector2f(0,-20);
-		Physics.friction = 0;
-		Physics.drag = .0000f;
+		Physics.gravity = new Vector2f(0,-50);
+		Physics.friction = 0.1f;
+		Physics.drag = .00001f;
 		theBall = new Ball(500f, 500f, 25f);
 		theBall2 = new Ball(600f, 500f, 25f);
 		theRect = new Rectangle(200f,500f,200f,250f);
@@ -33,6 +34,12 @@ public class TestPongGame extends Game {
 		objectManager.addObject(theBall); theBall.setName("test");
 		objectManager.addObject(theBall2);
 		objectManager.addObject(theRect2);
+		
+		for (int i = 0; i<50; i++) {
+			Ball newBall = new Ball( (float) random()*Game.getScreenWidth(), (float) random()*Game.getScreenHeight(), (float) random() * 50f );
+			objectManager.addObject(newBall);
+		}
+		
 		objectManager.setExitBehaviors(epicgl.GameObject.ExitBehavior.BOUNCE);
 		
 	}

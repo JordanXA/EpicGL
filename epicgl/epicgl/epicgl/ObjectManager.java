@@ -20,14 +20,14 @@ public class ObjectManager {
 		   object.tick();
 		   
 		   //fun color code
-		   ///*
+		   /*
 		   if (object.getCollisions().size()>0) {
 			   object.fillObject(new Vector3(0.95f,0f,0f));
 		   }
 		   else {
 			   object.fillObject(new Vector3(0.5f,0.5f,0.5f));
 		   }
-		   //*/
+		   */
 		   
 		   
 		   //fun color code

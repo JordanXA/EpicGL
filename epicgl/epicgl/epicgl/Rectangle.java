@@ -6,11 +6,11 @@ public class Rectangle extends GameObject {
 
 	float width, height;
 	
-	float getWidth() {
+	public float getWidth() {
 		return width;
 	}
 	
-	float getHeight() {
+	public float getHeight() {
 		return height;
 	}
 	
